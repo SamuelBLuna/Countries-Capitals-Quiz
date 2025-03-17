@@ -1,4 +1,4 @@
-<x-main-layout pageTitle='Questions'>
+<x-main-layout pageTitle='Countries & Capitals Quiz'>
     <div class="container">
         <x-question :country="$country" :currentQuestion="$currentQuestion" :totalQuestions="$totalQuestions" />
         <div class="row">
