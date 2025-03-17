@@ -45,7 +45,7 @@ class MainController extends Controller
             'quiz' => $quiz,
             'total_questions' => $total_questions,
             'current_question' => 1,
-            'current_answers' => 0,
+            'correct_answers' => 0,
             'wrong_answers' => 0,
         ]);
 
@@ -116,21 +116,22 @@ class MainController extends Controller
         $quiz = \session('quiz');
         $current_question = \session('current_question') - 1;
         $correct_answer = $quiz[$current_question]['correct_answer'];
-        $correct_answers = \session('correct_answers');
-        $wrong_answres = \session('wrong_answres');
+
+        $correct_answers = \session('correct_answers', 0);
+        $wrong_answers = \session('wrong_answers', 0);
 
         if ($answer == $correct_answer) {
             $correct_answers++;
             $quiz[$current_question]['correct'] = \true;
         } else {
-            $wrong_answres++;
+            $wrong_answers++;
             $quiz[$current_question]['correct'] = \false;
         }
 
         \session()->put([
             'quiz' => $quiz,
             'correct_answers' => $correct_answers,
-            'wrong_answres' => $wrong_answres,
+            'wrong_answers' => $wrong_answers,
         ]);
 
         $data = [
@@ -160,6 +161,12 @@ class MainController extends Controller
 
     public function showResult()
     {
-        echo 'Final do jogo';
+
+        return \view('final_result')->with([
+            'correct_answers' => \session('correct_answers'),
+            'wrong_answers' => \session('wrong_answers'),
+            'total_questions' => \session('total_questions'),
+            'percentage' => \round(\session('correct_answers') / session('total_questions') * 100, 2)
+        ]);
     }
 }
